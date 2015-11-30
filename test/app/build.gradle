@@ -1,0 +1,87 @@
+apply plugin: 'works-versioning'
+apply plugin: 'com.android.application'
+
+repositories {
+    jcenter()
+}
+
+worksVersioning {
+    productFlavors {
+        playStore {
+            versionName "1.2.4"
+        }
+
+        adHoc {
+            versionName "1.2.4"
+        }
+    }
+
+    buildTypes {
+        fabric {
+            appendCode true
+        }
+
+        release {
+            appendCode false
+        }
+    }
+}
+
+gradle.allprojects {
+    ext.generateVersionCode = {
+        println 'pwp ' + project.worksVersioning.productFlavors
+        for (def taskName : gradle.startParameter.taskNames) {
+            println 'taskName = ' + taskName
+        }
+
+        return 1
+    }
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        applicationId "com.mobilesolutions.plugintest"
+        minSdkVersion 14
+        targetSdkVersion 23
+
+        versionCode generateVersionCode()
+        versionName "1.0"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+
+    productFlavors {
+        playStore {
+        }
+
+        adHoc {
+
+        }
+    }
+
+    buildTypes {
+        debug {
+
+        }
+
+        fabric {
+            initWith(buildTypes.release)
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:23.1.1'
+}
