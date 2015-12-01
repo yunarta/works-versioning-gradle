@@ -23,6 +23,8 @@ classpath 'com.mobilesolutionworks:works-versioning:1.1'
 In your build.gradle use this format for example
 
 ```
+apply plugin: 'com.android.application'
+
 worksVersioning {
     productFlavors {
         playStore {
@@ -43,6 +45,36 @@ worksVersioning {
         release {
             appendCode false
             tagRepo true
+        }
+    }
+}
+
+android {
+    defaultConfig {
+        versionCode versioning().code
+        versionName versioning().name
+    }
+    
+    productFlavors {
+        playStore {
+        }
+
+        adHoc {
+        }
+    }
+
+    buildTypes {
+        debug {
+
+        }
+
+        fabric {
+            initWith(buildTypes.debug)
+        }
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
