@@ -18,6 +18,12 @@ In build script section add
 
 [ ![Download](https://api.bintray.com/packages/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/images/download.svg) ](https://bintray.com/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/_latestVersion)
 ```
+buildscript {
+    repositories {
+        maven { url 'https://dl.bintray.com/yunarta-kartawahyudi/snapshot/' }
+    }
+}
+
 classpath 'com.mobilesolutionworks:works-versioning:1.2'
 ```
 
