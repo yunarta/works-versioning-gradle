@@ -9,7 +9,7 @@ public class ProductFlavor implements Serializable {
 
     String versionName;
 
-    String appName;
+    String apkName;
 
     public ProductFlavor(String name) {
         this.name = name
@@ -28,12 +28,12 @@ public class ProductFlavor implements Serializable {
         return this
     }
 
-    String getAppName() {
-        return appName
+    String getApkName() {
+        return apkName
     }
 
-    ProductFlavor setAppName(String appName) {
-        this.appName = appName
+    ProductFlavor setApkName(String appName) {
+        this.apkName = appName
         return this
     }
 }

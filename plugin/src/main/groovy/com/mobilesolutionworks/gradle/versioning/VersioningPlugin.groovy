@@ -120,7 +120,7 @@ class VersioningPlugin implements Plugin<Project> {
                     versioning = new Versioning()
                     versioning.code = value
                     versioning.name = versionName
-                    versioning.appName = selected.flavor.appName
+                    versioning.appName = selected.flavor.apkName
 
                     println '\tversion ' + versionName + ' build ' + value
 

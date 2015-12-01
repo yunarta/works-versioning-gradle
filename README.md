@@ -24,7 +24,7 @@ buildscript {
     }
 }
 
-classpath 'com.mobilesolutionworks:works-versioning:1.2'
+classpath 'com.mobilesolutionworks:works-versioning:1.3'
 ```
 
 In your build.gradle use this format for example
@@ -36,12 +36,12 @@ worksVersioning {
     productFlavors {
         playStore {
             versionName "1.2.4"
-            appName 'AppPlaystore'
+            apkName 'AppPlaystore'
         }
 
         adHoc {
             versionName "1.2.4"
-            appName 'AppAdHoc'
+            apkName 'AppAdHoc'
         }
     }
 

@@ -10,12 +10,12 @@ worksVersioning {
 
     productFlavors {
         playStore {
-            appName "Gate"
+            apkName "Gate"
             versionName "1.2.4"
         }
 
         adHoc {
-            appName "Gate AdHoc"
+            apkName "Gate AdHoc"
             versionName "1.2.4"
         }
     }
