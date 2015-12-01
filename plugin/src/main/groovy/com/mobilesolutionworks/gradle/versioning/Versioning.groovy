@@ -8,4 +8,6 @@ class Versioning {
     public int code;
 
     public String name;
+
+    public String appName;
 }

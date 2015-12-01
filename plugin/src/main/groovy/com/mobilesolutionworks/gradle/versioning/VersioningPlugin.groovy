@@ -120,6 +120,7 @@ class VersioningPlugin implements Plugin<Project> {
                     versioning = new Versioning()
                     versioning.code = value
                     versioning.name = versionName
+                    versioning.appName = selected.flavor.appName
 
                     println '\tversion ' + versionName + ' build ' + value
 
@@ -156,21 +157,33 @@ class VersioningPlugin implements Plugin<Project> {
                 }
             }
 
+            if (versioning == null) {
+                def versioning = new Versioning()
+                versioning.name = '1.0'
+                versioning.code = 1
+                versioning.appName = 'app'
+
+                return versioning
+            }
             return versioning
         }
 
         project.afterEvaluate {
             project.android.applicationVariants.all {
-                generateOutputName(project, it)
+                def name = project.name
+                if (versioning != null && versioning.appName != null) {
+                    name = versioning.appName
+                }
+                generateOutputName(project, it, name)
             }
         }
     }
 
     private def templateEngine = new SimpleTemplateEngine()
 
-    def generateOutputName(Project project, variant) {
+    def generateOutputName(Project project, variant, String name) {
         def map = [
-                'appName'    : project.name,
+                'appName'    : name,
                 'projectName': project.rootProject.name,
                 'flavorName' : variant.flavorName,
                 'buildType'  : variant.buildType.name,
@@ -178,7 +191,6 @@ class VersioningPlugin implements Plugin<Project> {
                 'versionCode': String.valueOf(variant.versionCode)
         ]
 
-        println variant.versionName + ' ' + variant.versionCode
         def template = '$appName-$flavorName-$buildType-v$versionName build $versionCode'
         def fileName = templateEngine.createTemplate(template).make(map).toString();
 
