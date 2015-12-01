@@ -16,8 +16,9 @@ Gradle plugin which this capability below
 
 In build script section add
 
+[ ![Download](https://api.bintray.com/packages/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/images/download.svg) ](https://bintray.com/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/_latestVersion)
 ```
-classpath 'com.mobilesolutionworks:works-versioning:1.1'
+classpath 'com.mobilesolutionworks:works-versioning:1.2'
 ```
 
 In your build.gradle use this format for example
@@ -29,10 +30,12 @@ worksVersioning {
     productFlavors {
         playStore {
             versionName "1.2.4"
+            appName 'AppPlaystore'
         }
 
         adHoc {
             versionName "1.2.4"
+            appName 'AppAdHoc'
         }
     }
 
