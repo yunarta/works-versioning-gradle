@@ -1,5 +1,6 @@
 package com.mobilesolutionworks.gradle.versioning
 
+import groovy.text.SimpleTemplateEngine
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.internal.reflect.Instantiator
@@ -98,7 +99,7 @@ class VersioningPlugin implements Plugin<Project> {
                     def int number = Integer.parseInt(token != null ? token : '1');
 
                     def date = numbers.getProperty(selected.flavor.name + selected.build.name + '.date')
-                    def today = String.format(Locale.ENGLISH, '%1$tY%1$tm%1$td', new Date())
+                    def today = String.format(Locale.ENGLISH, '%1$ty%1$tm%1$td', new Date())
 
                     if (!today.equals(date)) {
                         date = today
@@ -158,9 +159,36 @@ class VersioningPlugin implements Plugin<Project> {
             return versioning
         }
 
-        project.extensions.extraProperties.putAt('generateVersionName') {
-            return "1.0"
+        project.afterEvaluate {
+            project.android.applicationVariants.all {
+                generateOutputName(project, it)
+            }
         }
+    }
+
+    private def templateEngine = new SimpleTemplateEngine()
+
+    def generateOutputName(Project project, variant) {
+        def map = [
+                'appName'    : project.name,
+                'projectName': project.rootProject.name,
+                'flavorName' : variant.flavorName,
+                'buildType'  : variant.buildType.name,
+                'versionName': variant.versionName,
+                'versionCode': String.valueOf(variant.versionCode)
+        ]
+
+        println variant.versionName + ' ' + variant.versionCode
+        def template = '$appName-$flavorName-$buildType-v$versionName build $versionCode'
+        def fileName = templateEngine.createTemplate(template).make(map).toString();
+
+        if (variant.buildType.zipAlignEnabled) {
+            def file = variant.outputs[0].outputFile
+            variant.outputs[0].outputFile = new File(file.parent, fileName + ".apk")
+        }
+
+        def file = variant.outputs[0].packageApplication.outputFile
+        variant.outputs[0].packageApplication.outputFile = new File(file.parent, fileName + "-unaligned.apk")
     }
 
     static void addFlavor(ProductFlavor flavor) {

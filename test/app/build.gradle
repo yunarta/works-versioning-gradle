@@ -18,8 +18,8 @@ worksVersioning {
 
     buildTypes {
         fabric {
-            appendCode true
-            tagRepo true
+            appendCode false
+            tagRepo false
         }
 
         release {
