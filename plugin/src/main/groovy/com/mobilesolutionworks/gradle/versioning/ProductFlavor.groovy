@@ -22,20 +22,7 @@ public class ProductFlavor implements Serializable {
     }
 
     ProductFlavor setVersionName(String version) {
-        println 'setVersionName = ' + version
         this.versionName = version
         return this
     }
-
-    ProductFlavor versionName(String version) {
-        println 'setVersionName = ' + version
-        this.versionName = version
-        return this
-    }
-
-    @Override
-    String toString() {
-        return name + ' ' + versionName
-    }
-
 }

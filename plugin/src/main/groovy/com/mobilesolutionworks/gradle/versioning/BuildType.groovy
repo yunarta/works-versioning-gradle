@@ -9,6 +9,8 @@ public class BuildType implements Serializable {
 
     boolean appendCode;
 
+    boolean tagRepo;
+
     public BuildType(String name) {
         this.name = name
     }
@@ -26,13 +28,11 @@ public class BuildType implements Serializable {
         return this
     }
 
-    BuildType appendCode(boolean appendCode) {
-        this.appendCode = appendCode
-        return this
+    boolean getTagRepo() {
+        return tagRepo
     }
 
-    @Override
-    String toString() {
-        return name + ' ' + appendCode
+    void setTagRepo(boolean tagRepo) {
+        this.tagRepo = tagRepo
     }
 }

@@ -1,3 +1,13 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
+    }
+}
+
 group 'com.mobilesolutionworks'
 version '1.0'
 
@@ -5,9 +15,31 @@ apply plugin: 'groovy'
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     compile gradleApi()
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
+
+apply from: 'https://raw.githubusercontent.com/yunarta/works-gradle-script/master/publish-works.gradle'
+
+worksPublish {
+    bintray {
+        repo = 'snapshot'
+        name = group + ':' + 'works-versioning'
+    }
+
+    developer {
+        id = 'yunarta'
+        name = 'Yunarta Kartawahyudi'
+        email = 'yunarta.kartawahyudi@gmail.com'
+    }
+
+    siteUrl = 'https://github.com/yunarta/works-versioning-android'
+    gitUrl = 'https://github.com/yunarta/works-versioning-android.git'
+
+}
+
+apply from: 'https://raw.githubusercontent.com/yunarta/works-gradle-script/master/publish-bintray-for-java-lib-nojavadoc.gradle'

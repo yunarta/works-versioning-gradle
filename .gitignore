@@ -79,3 +79,4 @@ proguard/
 
 # Android Studio captures folder
 captures/
+build-number.properties

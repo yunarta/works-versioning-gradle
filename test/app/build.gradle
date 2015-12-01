@@ -19,24 +19,16 @@ worksVersioning {
     buildTypes {
         fabric {
             appendCode true
+            tagRepo true
         }
 
         release {
             appendCode false
+            tagRepo true
         }
     }
 }
 
-gradle.allprojects {
-    ext.generateVersionCode = {
-        println 'pwp ' + project.worksVersioning.productFlavors
-        for (def taskName : gradle.startParameter.taskNames) {
-            println 'taskName = ' + taskName
-        }
-
-        return 1
-    }
-}
 
 android {
     compileSdkVersion 23
@@ -47,8 +39,8 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
 
-        versionCode generateVersionCode()
-        versionName "1.0"
+        versionCode versioning().code
+        versionName versioning().name
     }
 
     compileOptions {
@@ -61,7 +53,6 @@ android {
         }
 
         adHoc {
-
         }
     }
 
@@ -71,7 +62,7 @@ android {
         }
 
         fabric {
-            initWith(buildTypes.release)
+            initWith(buildTypes.debug)
         }
 
         release {
