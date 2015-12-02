@@ -7,8 +7,6 @@ public class ProductFlavor implements Serializable {
 
     final String name;
 
-    String versionName;
-
     String apkName;
 
     public ProductFlavor(String name) {
@@ -17,15 +15,6 @@ public class ProductFlavor implements Serializable {
 
     public String getName() {
         return name
-    }
-
-    String getVersionName() {
-        return versionName
-    }
-
-    ProductFlavor setVersionName(String version) {
-        this.versionName = version
-        return this
     }
 
     String getApkName() {
