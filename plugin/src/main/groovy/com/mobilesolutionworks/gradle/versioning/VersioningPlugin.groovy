@@ -3,6 +3,7 @@ package com.mobilesolutionworks.gradle.versioning
 import groovy.text.SimpleTemplateEngine
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.internal.reflect.Instantiator
 
 /**
@@ -77,9 +78,12 @@ class VersioningPlugin implements Plugin<Project> {
                 }
 
                 def Variant selected;
+                def String selectedTaskName;
+
                 for (def taskName : project.gradle.startParameter.taskNames) {
                     selected = variants[taskName.toLowerCase()]
                     if (selected != null) {
+                        selectedTaskName = taskName
                         break;
                     }
                 }
@@ -128,27 +132,43 @@ class VersioningPlugin implements Plugin<Project> {
                         println '\tchecking for project cleaness'
 
                         def user = "$System.env.USER"
-                        def versionTag = selected.flavor.name + '-' + selected.flavor.name + '_v' + versions[selected.flavor.name] + '.' + value
+                        def versionTag = selected.flavor.name + '-' + selected.build.name + '_v' + versions[selected.flavor.name] + '.' + value
                         def versionAnnotation = 'build at ' + String.format(Locale.ENGLISH, '%1$tC', new Date()) + ' by ' + user + '\n'
                         versionAnnotation += '  flavor ' + selected.flavor.name + ' build + ' + selected.build.name
 
-                        def exec = Runtime.getRuntime().exec('git status -s')
+                        def String[] params
+                        params = ['git', '-C', project.projectDir, 'status', '-s']
+                        def exec = Runtime.getRuntime().exec(params)
                         def String status = IOUtils.read(exec.in).trim()
 
-                        if (!"".equals(status)) {
-                            println(status)
-                            throw new IllegalStateException('please finalize your local repository and retry again. "git status -m" must return empty indicating all files committed and unknown files')
+//                        if (!"".equals(status)) {
+//                            println(status)
+//                            throw new IllegalStateException('please finalize your local repository and retry again. "git status -m" must return empty indicating all files committed and unknown files')
+//                        }
+
+//                        println 'project.task(selectedTaskName) = ' + project.task(selectedTaskName)
+
+
+                        project.afterEvaluate {
+                            def TagGitTask tagGit = project.tasks.create('tagRepo', TagGitTask)
+                            tagGit.params = ['git', '-C', project.projectDir, 'tag', '-a', versionTag, '-m', versionAnnotation]
+
+                            for (Task task : project.getTasksByName(selectedTaskName, true)) {
+                                task.finalizedBy(tagGit)
+                            }
                         }
 
-                        println '\ttagging project'
-
-                        def String[] params = ['git', 'tag', '-a', versionTag, '-m', versionAnnotation]
-
-                        exec = Runtime.getRuntime().exec(params)
-                        def String message = IOUtils.read(exec.errorStream).trim()
-                        if (exec.exitValue() != 0) {
-                            println exec.exitValue() + ' ' + message
-                        }
+//                        def Task tagGit = task  {
+//                            println '\ttagging project'
+//
+//                            params = ['git', '-C', project.projectDir, 'tag', '-a', versionTag, '-m', versionAnnotation]
+//
+//                            exec = Runtime.getRuntime().exec(params)
+//                            def String message = IOUtils.read(exec.errorStream).trim()
+//                            if (exec.exitValue() != 0) {
+//                                println exec.exitValue() + ' ' + message
+//                            }
+//                        }
                     }
 
                     numbers.setProperty(selected.flavor.name + selected.build.name + '.build', String.valueOf(number))
