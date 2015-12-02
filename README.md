@@ -1,5 +1,5 @@
 # Works Versioning for Gradle
-[ ![Download](https://api.bintray.com/packages/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/images/download.svg) ](https://bintray.com/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/yunarta-kartawahyudi/maven/com.mobilesolutionworks%3Aworks-versioning/images/download.svg) ](https://bintray.com/yunarta-kartawahyudi/maven/com.mobilesolutionworks%3Aworks-versioning/_latestVersion)
 
 Gradle plugin which this capability below
 
@@ -16,11 +16,11 @@ Gradle plugin which this capability below
 
 In build script section add
 
-[ ![Download](https://api.bintray.com/packages/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/images/download.svg) ](https://bintray.com/yunarta-kartawahyudi/snapshot/com.mobilesolutionworks%3Aworks-versioning/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/yunarta-kartawahyudi/maven/com.mobilesolutionworks%3Aworks-versioning/images/download.svg) ](https://bintray.com/yunarta-kartawahyudi/maven/com.mobilesolutionworks%3Aworks-versioning/_latestVersion)
 ```
 buildscript {
     repositories {
-        maven { url 'https://dl.bintray.com/yunarta-kartawahyudi/snapshot/' }
+        jcenter()
     }
 }
 

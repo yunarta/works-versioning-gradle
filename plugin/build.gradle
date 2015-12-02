@@ -27,7 +27,7 @@ apply from: 'https://raw.githubusercontent.com/yunarta/works-gradle-script/maste
 
 worksPublish {
     bintray {
-        repo = 'snapshot'
+        repo = 'maven'
         name = group + ':' + 'works-versioning'
     }
 

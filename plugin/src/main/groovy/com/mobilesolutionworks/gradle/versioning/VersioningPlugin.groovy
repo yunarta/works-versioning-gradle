@@ -141,10 +141,10 @@ class VersioningPlugin implements Plugin<Project> {
                         def exec = Runtime.getRuntime().exec(params)
                         def String status = IOUtils.read(exec.in).trim()
 
-//                        if (!"".equals(status)) {
-//                            println(status)
-//                            throw new IllegalStateException('please finalize your local repository and retry again. "git status -m" must return empty indicating all files committed and unknown files')
-//                        }
+                        if (!"".equals(status)) {
+                            println(status)
+                            throw new IllegalStateException('please finalize your local repository and retry again. "git status -m" must return empty indicating all files committed and unknown files')
+                        }
 
 //                        println 'project.task(selectedTaskName) = ' + project.task(selectedTaskName)
 
