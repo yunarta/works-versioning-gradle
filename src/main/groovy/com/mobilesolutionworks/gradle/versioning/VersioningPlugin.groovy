@@ -81,7 +81,13 @@ class VersioningPlugin implements Plugin<Project> {
                 def String selectedTaskName;
 
                 for (def taskName : project.gradle.startParameter.taskNames) {
-                    selected = variants[taskName.toLowerCase()]
+                    for (String variantName : variants.keySet()) {
+                        if (taskName.toLowerCase().endsWith(variantName)) {
+                            selected = variants[variantName]
+                            break
+                        }
+                    }
+
                     if (selected != null) {
                         selectedTaskName = taskName
                         break;
@@ -116,6 +122,9 @@ class VersioningPlugin implements Plugin<Project> {
                     def long value = Long.parseLong(versionCode).longValue()
 
                     def versionName = versions[selected.flavor.name]
+                    if (versionName == null || versionName.equals('')) {
+                        throw new IllegalStateException("versionName for " + selected.flavor.name + " is not defined")
+                    }
 
                     if (selected.build.appendCode) {
                         versionName += '-' + versionCode
@@ -155,6 +164,16 @@ class VersioningPlugin implements Plugin<Project> {
 
                             for (Task task : project.getTasksByName(selectedTaskName, true)) {
                                 task.finalizedBy(tagGit)
+                            }
+
+                            if (selected.build.betaUpload) {
+                                def crashlyticUpload = ('crashlyticsUploadDistribution' + selected.flavor.name + selected.build.name).toLowerCase()
+//                                println 'crashlyticUpload = ' + crashlyticUpload
+                                def betaTask = project.tasks.find { t -> t.name.toLowerCase().contains(crashlyticUpload) }
+//                                println ' betaTask = ' + betaTask
+                                if (betaTask != null) {
+                                    tagGit.finalizedBy(betaTask)
+                                }
                             }
                         }
 
@@ -214,13 +233,15 @@ class VersioningPlugin implements Plugin<Project> {
         def template = '$appName-$flavorName-$buildType-v$versionName build $versionCode'
         def fileName = templateEngine.createTemplate(template).make(map).toString();
 
-        if (variant.buildType.zipAlignEnabled) {
-            def file = variant.outputs[0].outputFile
-            variant.outputs[0].outputFile = new File(file.parent, fileName + ".apk")
-        }
+        if (!variant.buildType.name.toLowerCase().contains('debug')) {
+            if (variant.buildType.zipAlignEnabled) {
+                def file = variant.outputs[0].outputFile
+                variant.outputs[0].outputFile = new File(file.parent, fileName + ".apk")
+            }
 
-        def file = variant.outputs[0].packageApplication.outputFile
-        variant.outputs[0].packageApplication.outputFile = new File(file.parent, fileName + "-unaligned.apk")
+            def file = variant.outputs[0].packageApplication.outputFile
+            variant.outputs[0].packageApplication.outputFile = new File(file.parent, fileName + "-unaligned.apk")
+        }
     }
 
     static void addFlavor(ProductFlavor flavor) {

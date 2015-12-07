@@ -11,6 +11,8 @@ public class BuildType implements Serializable {
 
     boolean tagRepo;
 
+    boolean betaUpload;
+
     public BuildType(String name) {
         this.name = name
     }
@@ -34,5 +36,13 @@ public class BuildType implements Serializable {
 
     void setTagRepo(boolean tagRepo) {
         this.tagRepo = tagRepo
+    }
+
+    boolean getBetaUpload() {
+        return betaUpload
+    }
+
+    void setBetaUpload(boolean betaUpload) {
+        this.betaUpload = betaUpload
     }
 }
