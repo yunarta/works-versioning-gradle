@@ -22,5 +22,14 @@ class TagGitTask extends DefaultTask {
         } else {
             println '\ttagging project successful'
         }
+
+        params = ['git', '-C', project.projectDir, 'push', 'origin', '--tags']
+        exec = Runtime.getRuntime().exec(params)
+        message = IOUtils.read(exec.errorStream).trim()
+        if (exec.exitValue() != 0) {
+            println exec.exitValue() + ' ' + message
+        } else {
+            println '\tpushing tag to origin'
+        }
     }
 }
